@@ -1,4 +1,4 @@
-import './App.css'
+cimport './App.css'
 
 function App() {
 

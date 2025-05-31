@@ -50,7 +50,7 @@ export  function LoginPage() {
                     className="p-10 flex flex-col items-center justify-center bg-purple-100 text-center"
                 >
                     <h2 className="text-3xl font-bold text-purple-700 mb-4">
-                        {isSignUp ? "Already have an account?" : "New here?"}
+                        {isSignUp ? "Already have an account?" : "Don't you have an Account ?"}
                     </h2>
                     <p className="mb-6 text-purple-600">
                         {isSignUp

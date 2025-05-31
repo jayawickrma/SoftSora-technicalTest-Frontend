@@ -1,6 +1,7 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {TaskPage} from "./Pages/TaskPage.tsx";
+import {LoginPage} from "./Pages/LoginPage.tsx";
 
 
 function App() {
@@ -9,7 +10,8 @@ function App() {
     <>
         <Router>
             <Routes>
-                <Route path="/" element={<TaskPage/>}  />
+                <Route path="/" element={<LoginPage/>}/>
+                <Route path="/tasks" element={<TaskPage/>}  />
             </Routes>
         </Router>
     </>

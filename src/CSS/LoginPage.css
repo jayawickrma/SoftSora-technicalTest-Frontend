@@ -1,11 +1,11 @@
 .login-container {
-    min-height: 94.6vh;
-    width: 98.4vw;
+    min-height: 93.5vh;
+    width: 96.9011vw;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 20px;
-    margin-left: -60px;
-    margin-bottom: -50px;
-    margin-top: -50px;
+    margin-left: -120px;
+    margin-bottom: -55px;
+    margin-top: -60px;
 }
 
 .login-card {

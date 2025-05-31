@@ -1,10 +1,10 @@
-import type {TaskModel} from "../Model/TaskModel.ts";
+import type { TaskModel } from "../Model/TaskModel";
 
-interface TaskCardProps{
-    task :TaskModel;
+interface TaskCardProps {
+    task: TaskModel;
 }
 
-export  function TaskCard({ task }:TaskCardProps) {
+export function TaskCard({ task }: TaskCardProps) {
     return (
         <div className="bg-white shadow-md hover:shadow-xl transition-shadow duration-300 rounded-xl p-6 w-full max-w-md mx-auto">
             <div className="flex justify-between items-start">

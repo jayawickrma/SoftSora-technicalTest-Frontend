@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 export  function LoginPage() {
     const [isSignUp, setIsSignUp] = useState(false);
 
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600 p-4">
             <div className="w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2">

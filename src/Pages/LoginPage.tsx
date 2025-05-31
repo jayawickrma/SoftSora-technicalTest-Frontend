@@ -1,71 +1,77 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-
+import '../CSS/LoginPage.css'
 export  function LoginPage() {
     const [isSignUp, setIsSignUp] = useState(false);
 
+    // @ts-ignore
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Handle form submission here
+        console.log(isSignUp ? "Signing up..." : "Signing in...");
+    };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600 p-4">
-            <div className="w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-                <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="p-10 flex flex-col justify-center bg-indigo-100"
-                >
-                    <h2 className="text-3xl font-bold text-indigo-700 mb-6 text-center">
-                        {isSignUp ? "Create an Account" : "Welcome Back!"}
-                    </h2>
-                    <form className="space-y-4">
-                        {isSignUp && (
-                            <input
-                                type="text"
-                                placeholder="Full Name"
-                                className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            />
-                        )}
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                        <button
-                            type="submit"
-                            className="w-full py-4 bg-indigo-700 hover:bg-indigo-800 text-white font-semibold rounded-lg"
-                        >
-                            {isSignUp ? "Sign Up" : "Sign In"}
-                        </button>
-                    </form>
-                </motion.div>
+        <>
 
-                <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="p-10 flex flex-col items-center justify-center bg-purple-100 text-center"
-                >
-                    <h2 className="text-3xl font-bold text-purple-700 mb-4">
-                        {isSignUp ? "Already have an account?" : "Don't you have an Account ?"}
-                    </h2>
-                    <p className="mb-6 text-purple-600">
-                        {isSignUp
-                            ? "Sign in to manage your tasks efficiently."
-                            : "Sign up to start managing your tasks like a pro!"}
-                    </p>
-                    <button
-                        onClick={() => setIsSignUp(!isSignUp)}
-                        className="px-6 py-3 border border-purple-700 text-purple-700 rounded-lg hover:bg-purple-200"
-                    >
-                        {isSignUp ? "Sign In" : "Sign Up"}
-                    </button>
-                </motion.div>
+            <div className="login-container d-flex align-items-center justify-content-center">
+                <div className="login-card w-100">
+                    <div className="row h-100">
+                        <div className="col-md-6 form-section slide-in-left">
+                            <h2 className="form-title">
+                                {isSignUp ? "Create an Account" : "Welcome Back!"}
+                            </h2>
+                            <div>
+                                {isSignUp && (
+                                    <div className="mb-3">
+                                        <input
+                                            type="text"
+                                            placeholder="Full Name"
+                                            className="form-input"
+                                        />
+                                    </div>
+                                )}
+                                <div className="mb-3">
+                                    <input
+                                        type="email"
+                                        placeholder="Email"
+                                        className="form-input"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <input
+                                        type="password"
+                                        placeholder="Password"
+                                        className="form-input"
+                                    />
+                                </div>
+                                <button
+                                    onClick={handleSubmit}
+                                    className="btn-primary-custom"
+                                >
+                                    {isSignUp ? "Sign Up" : "Sign In"}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="col-md-6 welcome-section slide-in-right">
+                            <h2 className="welcome-title">
+                                {isSignUp ? "Already have an account?" : "Don't have an Account?"}
+                            </h2>
+                            <p className="welcome-text">
+                                {isSignUp
+                                    ? "Sign in to manage your tasks efficiently."
+                                    : "Sign up to start managing your tasks like a pro!"}
+                            </p>
+                            <button
+                                onClick={() => setIsSignUp(!isSignUp)}
+                                className="btn-outline-custom"
+                            >
+                                {isSignUp ? "Sign In" : "Sign Up"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </>
     );
 }

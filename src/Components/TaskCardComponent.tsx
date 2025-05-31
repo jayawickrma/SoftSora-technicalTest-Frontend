@@ -1,4 +1,5 @@
 import type { TaskModel } from "../Model/TaskModel";
+import "../CSS/taskCard.css";
 
 interface TaskCardProps {
     task: TaskModel;
@@ -6,30 +7,26 @@ interface TaskCardProps {
 
 export function TaskCard({ task }: TaskCardProps) {
     return (
-        <div className="bg-white shadow-md hover:shadow-xl transition-shadow duration-300 rounded-xl p-6 w-full max-w-md mx-auto">
-            <div className="flex justify-between items-start">
-                <div>
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">
-                        {task.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-4">
+        <div className="task-card">
+            <div className="task-card-header">
+                <div className="task-card-details">
+                    <h3 className="task-title">{task.title}</h3>
+                    <p className="task-description">
                         {task.description || "No description provided."}
                     </p>
-                    <p className="text-sm text-gray-500">
-                        Due: <span className="font-medium">{task.dueDate || "No due date"}</span>
+                    <p className="task-date">
+                        <strong>Due:</strong> {task.dueDate || "No due date"}
+                    </p>
+                    <p className="task-date">
+                        <strong>Created:</strong> {task.createdAt}
+                    </p>
+                    <p className="task-priority">
+                        <strong>Priority:</strong> {task.priority}
                     </p>
                 </div>
-                <span
-                    className={`text-xs px-3 py-1 rounded-full font-semibold ${
-                        task.status === "completed"
-                            ? "bg-green-100 text-green-800"
-                            : task.status === "in-progress"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-red-100 text-red-800"
-                    }`}
-                >
-          {task.status}
-        </span>
+                <span className={`task-status ${task.status}`}>
+                    {task.status}
+                </span>
             </div>
         </div>
     );

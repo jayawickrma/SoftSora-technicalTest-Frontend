@@ -1,11 +1,11 @@
 .login-container {
-    min-height: 93.5vh;
-    width: 96.9011vw;
+    min-height: 96vh;
+    width: 96.9vw;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 20px;
-    margin-left: -120px;
+    margin-left: -124px;
     margin-bottom: -55px;
-    margin-top: -60px;
+    margin-top: -70px;
 }
 
 .login-card {
@@ -19,7 +19,7 @@
 
 .form-section {
     background: linear-gradient(135deg, #e8f2ff 0%, #f0f8ff 100%);
-    padding: 60px 40px;
+    padding: 30px 20px;
 }
 
 .welcome-section {

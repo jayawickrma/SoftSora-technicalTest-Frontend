@@ -1,21 +1,18 @@
-import './App.css'
+import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import {TaskPage} from "./Pages/TaskPage.tsx";
-import {LoginPage} from "./Pages/LoginPage.tsx";
+import { TaskPage } from "./Pages/TaskPage.tsx";
+import { LoginPage } from "./Pages/LoginPage.tsx";
 
 
 function App() {
-
-  return (
-    <>
+    return (
         <Router>
             <Routes>
-                <Route path="/" element={<LoginPage/>}/>
-                <Route path="/tasks" element={<TaskPage/>}  />
+                <Route path="/" element={<LoginPage />} />
+                <Route path="/tasks" element={<TaskPage />} />
             </Routes>
         </Router>
-    </>
-  )
+    );
 }
 
-export default App
+export default App;

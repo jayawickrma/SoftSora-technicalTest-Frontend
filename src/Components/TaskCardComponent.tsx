@@ -13,6 +13,10 @@ export function TaskCard({ task }: TaskCardProps) {
         navigate(`/tasks/edit/${task.id}`);
     };
 
+    const handleDelete=()=>{
+
+    }
+
     return (
         <div className={`task-card ${task.priority?.toLowerCase()}-priority`}>
             <div className="task-card-header">
@@ -35,6 +39,7 @@ export function TaskCard({ task }: TaskCardProps) {
                     </span>
                     <div className="task-buttons">
                         <button className="task-btn edit" onClick={handleEdit}>✏️ Edit</button>
+                        <button className="task-btn delete" onClick={handleDelete}>🚮 Delete</button>
                     </div>
                 </div>
             </div>

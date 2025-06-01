@@ -7,7 +7,12 @@
     margin-bottom: -55px;
     margin-top: -70px;
 }
-
+html, body {
+    overflow-x: auto;
+}
+.login-container {
+    overflow-y: auto;
+}
 .login-card {
     background: white;
     border-radius: 20px;
@@ -180,7 +185,7 @@
     }
 
     .form-section, .welcome-section {
-        padding: 10px 10px;
+        padding: 15px 10px;
     }
 
     .form-title, .welcome-title {
@@ -188,12 +193,10 @@
     }
 
     .login-container {
-        margin-left: -30px;
-        max-width: 94vw;
-        max-height: 90vh;
-        margin-top: -50px;
-        overflow: hidden; /* This removes any scrollbars */
-        box-sizing: border-box; /* Ensures padding and borders are included in the element's total width/height */
+        margin-left: -27px;
+        margin-top: -45px;
+        overflow: hidden;
+        box-sizing: border-box;
     }
-
 }
+

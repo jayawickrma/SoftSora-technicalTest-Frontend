@@ -35,6 +35,7 @@ export const sampleTasks: TaskModel[] = [
 
 export function TaskPage() {
     const [searchQuery, setSearchQuery] = useState("");
+    const [statusFilter, setStatusFilter] = useState("all");
 
     const priorityOrder: Record<string, number> = {
         high: 1,
@@ -46,6 +47,9 @@ export function TaskPage() {
         .filter((task) =>
             task.title.toLowerCase().includes(searchQuery.toLowerCase())
         )
+        .filter((task) =>
+            statusFilter === "all" ? true : task.status === statusFilter
+        )
         .sort((a, b) => {
             const priorityDiff =
                 (priorityOrder[a.priority?.toLowerCase() || "low"] ?? 4) -
@@ -53,31 +57,45 @@ export function TaskPage() {
 
             if (priorityDiff !== 0) return priorityDiff;
 
-            // If priority is the same, sort by due date
             return new Date(a.dueDate || "").getTime() - new Date(b.dueDate || "").getTime();
         });
 
     return (
         <div className="container py-4">
-            <h2 className="mb-4">Manage Your Tasks</h2>
+            <div className="task-top-bar">
+                <h2 className="mb-4">Manage Your Tasks</h2>
+                <input
+                    type="text"
+                    placeholder="Search by title..."
+                    className="search-bar"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />  <br/> <br/>
+                <div className="task-header">
+                    <div className="task-filters">
+                        {["all", "pending", "in-progress", "completed"].map((status) => (
+                            <button
+                                key={status}
+                                className={`status-btn ${statusFilter === status ? "active" : ""}`}
+                                onClick={() => setStatusFilter(status)}
+                            >
+                                {status.toUpperCase().replace("-", "_")}
+                            </button>
+                        ))}
+                    </div>
+                    <button className="add-task-btn">Add Task</button>
+                </div>
 
-            {/* 🔍 Search bar */}
-            <input
-                type="text"
-                placeholder="Search by title..."
-                className="search-bar"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            </div>
 
-            {/* 🧾 Sorted and filtered tasks */}
             {filteredTasks.length > 0 ? (
                 filteredTasks.map((task) => (
-                    <TaskCard key={task.id} task={task} />
+                    <TaskCard key={task.id} task={task}/>
                 ))
             ) : (
                 <p>No tasks found.</p>
             )}
         </div>
+
     );
 }

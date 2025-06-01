@@ -10,7 +10,7 @@ export function TaskCard({ task }: TaskCardProps) {
     const navigate = useNavigate();
 
     const handleEdit = () => {
-        navigate(`/tasks/edit/${task.id}`);
+        navigate(`/tasks/edit`);
     };
 
     const handleDelete=()=>{
@@ -27,8 +27,8 @@ export function TaskCard({ task }: TaskCardProps) {
                     </p>
 
                     <div className="task-info">
-                        <p><strong>Due:</strong> {task.dueDate || "No due date"}</p>
                         <p><strong>Created:</strong> {task.createdAt}</p>
+                        <p><strong>Due:</strong> {task.dueDate || "No due date"}</p>
                         <p><strong>Priority:</strong> <span className="priority-chip">{task.priority}</span></p>
                     </div>
                 </div>
@@ -39,7 +39,7 @@ export function TaskCard({ task }: TaskCardProps) {
                     </span>
                     <div className="task-buttons">
                         <button className="task-btn edit" onClick={handleEdit}>✏️ Edit</button>
-                        <button className="task-btn delete" onClick={handleDelete}>🚮 Delete</button>
+                        <button className="task-btn delete" onClick={handleDelete}>🗑️ Delete</button>
                     </div>
                 </div>
             </div>

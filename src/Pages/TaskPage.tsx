@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { TaskModel } from "../Model/TaskModel.ts";
 import { TaskCard } from "../Components/TaskCardComponent.tsx";
-import "../CSS/taskCard.css";
+import "../CSS/TaskCard.css";
 
 export const sampleTasks: TaskModel[] = [
     {

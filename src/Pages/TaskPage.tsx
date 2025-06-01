@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { TaskModel } from "../Model/TaskModel.ts";
 import { TaskCard } from "../Components/TaskCardComponent.tsx";
+import { TaskModal } from "../Components/TaskModalCOmponent.tsx"; // Fixed typo in filename
 import "../CSS/TaskCard.css";
 
 export const sampleTasks: TaskModel[] = [
@@ -36,6 +37,9 @@ export const sampleTasks: TaskModel[] = [
 export function TaskPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
+    const [tasks, setTasks] = useState<TaskModel[]>(sampleTasks);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editTask, setEditTask] = useState<TaskModel | null>(null);
 
     const priorityOrder: Record<string, number> = {
         high: 1,
@@ -43,7 +47,7 @@ export function TaskPage() {
         low: 3,
     };
 
-    const filteredTasks = sampleTasks
+    const filteredTasks = tasks
         .filter((task) =>
             task.title.toLowerCase().includes(searchQuery.toLowerCase())
         )
@@ -60,6 +64,33 @@ export function TaskPage() {
             return new Date(a.dueDate || "").getTime() - new Date(b.dueDate || "").getTime();
         });
 
+    const handleAddClick = () => {
+        setEditTask(null);
+        setIsModalOpen(true);
+    };
+
+    const handleEditClick = (task: TaskModel) => {
+        setEditTask(task);
+        setIsModalOpen(true);
+    };
+
+    const handleModalSubmit = (data: Omit<TaskModel, "id">) => {
+        if (editTask) {
+            setTasks((prev) =>
+                prev.map((t) =>
+                    t.id === editTask.id ? { ...t, ...data } : t
+                )
+            );
+        } else {
+            const newTask: TaskModel = {
+                id: tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1,
+                ...data,
+            };
+            setTasks((prev) => [...prev, newTask]);
+        }
+        setIsModalOpen(false);
+    };
+
     return (
         <div className="container py-4">
             <div className="task-top-bar">
@@ -70,7 +101,8 @@ export function TaskPage() {
                     className="search-bar"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                />  <br/> <br/>
+                />
+                <br /><br />
                 <div className="task-header">
                     <div className="task-filters">
                         {["all", "pending", "in-progress", "completed"].map((status) => (
@@ -83,19 +115,25 @@ export function TaskPage() {
                             </button>
                         ))}
                     </div>
-                    <button className="add-task-btn">Add Task</button>
+                    <button className="add-task-btn" onClick={handleAddClick}>Add Task</button>
                 </div>
-
             </div>
 
             {filteredTasks.length > 0 ? (
                 filteredTasks.map((task) => (
-                    <TaskCard key={task.id} task={task}/>
+                    <TaskCard key={task.id} task={task} onEdit={handleEditClick} />
                 ))
             ) : (
                 <p>No tasks found.</p>
             )}
-        </div>
 
+            <TaskModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSubmit={handleModalSubmit}
+                initialData={editTask ? { ...editTask, id: undefined } as Omit<TaskModel, "id"> : undefined}
+                isEditMode={!!editTask}
+            />
+        </div>
     );
 }

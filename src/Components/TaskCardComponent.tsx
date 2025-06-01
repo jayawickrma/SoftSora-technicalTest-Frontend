@@ -1,21 +1,22 @@
 import type { TaskModel } from "../Model/TaskModel";
 import "../CSS/TaskCard.css";
-import { useNavigate } from "react-router-dom";
 
 interface TaskCardProps {
     task: TaskModel;
+    onEdit: (task: TaskModel) => void;
+    onDelete?: (taskId: number) => void;
 }
 
-export function TaskCard({ task }: TaskCardProps) {
-    const navigate = useNavigate();
-
+export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
     const handleEdit = () => {
-        navigate(`/tasks/edit`);
+        onEdit(task);
     };
 
-    const handleDelete=()=>{
-
-    }
+    const handleDelete = () => {
+        if(onDelete) {
+            onDelete(task.id);
+        }
+    };
 
     return (
         <div className={`task-card ${task.priority?.toLowerCase()}-priority`}>

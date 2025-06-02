@@ -1,7 +1,19 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import '../CSS/LoginPage.css'
+import {useNavigate} from "react-router-dom";
+import type {UserRootState} from "../Slices/UserSlice.ts";
+import {useSelector} from "react-redux";
 export  function LoginPage() {
     const [isSignUp, setIsSignUp] = useState(false);
+    const navigate =useNavigate()
+
+    const isAuthenticated = useSelector((state: UserRootState) => state.user.isAuthenticated);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/tasks");
+        }
+    }, [isAuthenticated, navigate]);
 
     // @ts-ignore
     const handleSubmit = (e) => {

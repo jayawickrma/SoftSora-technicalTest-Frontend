@@ -19,6 +19,17 @@ const initialState: {
         loading: false,
         error: "",
 };
+export type UserRootState = {
+    user: {
+        user: UserModel | null;
+        jwt_token: string | null;
+        refresh_token: string | null;
+        username: string | null;
+        isAuthenticated: boolean;
+        loading: boolean;
+        error: string;
+    };
+};
 
 export const login = createAsyncThunk(
     "auth/signIn",
@@ -51,8 +62,8 @@ const UserSlice = createSlice({
                 logout: (state) => {
                         state.user = null;
                         state.isAuthenticated = false;
-                        localStorage.removeItem("jwt_token");
-                        localStorage.removeItem("refresh_token");
+                        localStorage.removeItem("accessToken");
+                        localStorage.removeItem("refreshToken");
                 },
         },
         extraReducers: (builder) => {
@@ -65,8 +76,8 @@ const UserSlice = createSlice({
                                     state.username = action.payload.username;
                                     state.isAuthenticated = true;
                                     state.error = "";
-                                    localStorage.setItem("jwt_token", action.payload.accessToken);
-                                    localStorage.setItem("refresh_token", action.payload.refreshToken);
+                                    localStorage.setItem("accessToken", action.payload.accessToken);
+                                    localStorage.setItem("refreshToken", action.payload.refreshToken);
                             }
                     })
                     .addCase(register.pending, (state) => {
@@ -86,8 +97,8 @@ const UserSlice = createSlice({
                                     state.username = action.payload.username;
                                     state.isAuthenticated = true;
                                     state.error = "";
-                                    localStorage.setItem("jwt_token", action.payload.accessToken);
-                                    localStorage.setItem("refresh_token", action.payload.refreshToken);
+                                    localStorage.setItem("accessToken", action.payload.accessToken);
+                                    localStorage.setItem("refreshToken", action.payload.refreshToken);
                             }
                     })
                     .addCase(login.pending, (state) => {

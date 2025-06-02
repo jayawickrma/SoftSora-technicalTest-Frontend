@@ -48,7 +48,7 @@ export const register = createAsyncThunk(
     async (user: UserModel) => {
             try {
                     const response = await api.post("auth/signUp", user, { withCredentials: true });
-                    return response.data; // fixed: removed `()`
+                    return response.data;
             } catch (e) {
                     throw e;
             }

@@ -1,5 +1,5 @@
 export class TaskModel {
-    taskId:string
+    id:number
     title: string;
     description: string;
     priority: string;
@@ -7,8 +7,8 @@ export class TaskModel {
     dueDate:string;
     createdAt: string;
 
-    constructor(taskId: string, title: string, description: string, priority: string, status: "pending" | "in-progress" | "completed", dueDate: string, createdAt: string) {
-        this.taskId = taskId;
+    constructor(id: number, title: string, description: string, priority: string, status: "pending" | "in-progress" | "completed", dueDate: string, createdAt: string) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.priority = priority;

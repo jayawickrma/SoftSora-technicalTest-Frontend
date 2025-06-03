@@ -16,20 +16,10 @@ export function LoginPage() {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-    const { isAuthenticated, loading, error } = useSelector((state: UserRootState) => state.user);
+    const {  loading, error } = useSelector((state: UserRootState) => state.user);
 
 
-    useEffect(() => {
-        if (isAuthenticated && !isSignUp) {
-            Swal.fire({
-                icon: "success",
-                title: "Login Successful",
-                text: "You are now signed in!",
-                timer: 1500,
-                showConfirmButton: false,
-            }).then(() => navigate("/tasks"));
-        }
-    }, [isAuthenticated, navigate, isSignUp]);
+
 
 
     useEffect(() => {
@@ -68,7 +58,19 @@ export function LoginPage() {
                 });
             }
         } else {
-            dispatch(login({ name: "", email, password }));
+            const signInResult = await dispatch(login({ name: "", email, password }));
+            if (login.fulfilled.match(signInResult)) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Login Successful",
+                    text: "You are now signed in!",
+                    timer: 1500,
+                    showConfirmButton: false,
+                }).then(() => {
+                    localStorage.setItem('user-email' , email);
+                    navigate("/tasks")
+                });
+            }
         }
     };
 

@@ -1,51 +1,33 @@
-import { useState } from "react";
-import type { TaskModel } from "../Model/TaskModel.ts";
-import { TaskCard } from "../Components/TaskCardComponent.tsx";
-import { TaskModal } from "../Components/TaskModalCOmponent.tsx"; // Fixed typo in filename
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState, AppDispatch } from "../Store/Store.ts";
+import { TaskCard } from "../Components/TaskCardComponent";
+import { TaskModal } from "../Components/TaskModalCOmponent.tsx";
+import {
+    addTask,
+    updateTask,
+    getAllTasksFromSignedInUser,
+} from "../Slices/TaskSlice";
+import type { TaskModel } from "../Model/TaskModel";
 import "../CSS/TaskCard.css";
 
-export const sampleTasks: TaskModel[] = [
-    {
-        id: 1,
-        title: "Finish project report",
-        priority: "high",
-        description: "Complete the final draft of the quarterly report.",
-        dueDate: "2025-06-05",
-        status: "in-progress",
-        createdAt: "2025-07-01",
-    },
-    {
-        id: 2,
-        title: "Team meeting",
-        description: "Weekly sync-up with the product team.",
-        dueDate: "2025-06-02",
-        status: "pending",
-        priority: "low",
-        createdAt: "2025-06-31",
-    },
-    {
-        id: 3,
-        title: "Code review",
-        description: "Review the latest PRs for the frontend module.",
-        dueDate: "2025-06-01",
-        status: "completed",
-        priority: "medium",
-        createdAt: "2025-06-25",
-    },
-];
-
 export function TaskPage() {
+    const dispatch = useDispatch<AppDispatch>();
+    const { tasks, loading, error } = useSelector((state: RootState) => state.task);
+
+
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
-    const [tasks, setTasks] = useState<TaskModel[]>(sampleTasks);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editTask, setEditTask] = useState<TaskModel | null>(null);
 
-    const priorityOrder: Record<string, number> = {
-        high: 1,
-        medium: 2,
-        low: 3,
-    };
+    useEffect(() => {
+        const mail = localStorage.getItem('user-email')
+        console.log(mail)
+        if (mail){
+        dispatch(getAllTasksFromSignedInUser(mail));
+        }
+    }, []);
 
     const filteredTasks = tasks
         .filter((task) =>
@@ -55,13 +37,19 @@ export function TaskPage() {
             statusFilter === "all" ? true : task.status === statusFilter
         )
         .sort((a, b) => {
+            const priorityOrder: Record<string, number> = {
+                high: 1,
+                medium: 2,
+                low: 3,
+            };
+
             const priorityDiff =
-                (priorityOrder[a.priority?.toLowerCase() || "low"] ?? 4) -
-                (priorityOrder[b.priority?.toLowerCase() || "low"] ?? 4);
+                (priorityOrder[a.priority.toLowerCase()] ?? 4) -
+                (priorityOrder[b.priority.toLowerCase()] ?? 4);
 
             if (priorityDiff !== 0) return priorityDiff;
 
-            return new Date(a.dueDate || "").getTime() - new Date(b.dueDate || "").getTime();
+            return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
         });
 
     const handleAddClick = () => {
@@ -74,22 +62,21 @@ export function TaskPage() {
         setIsModalOpen(true);
     };
 
-    const handleModalSubmit = (data: Omit<TaskModel, "id">) => {
+    const handleModalSubmit = (data: Omit<TaskModel, "taskId" | "createdAt">) => {
         if (editTask) {
-            setTasks((prev) =>
-                prev.map((t) =>
-                    t.id === editTask.id ? { ...t, ...data } : t
-                )
-            );
+            dispatch(updateTask({ taskId: editTask.taskId, task: { ...editTask, ...data } }));
         } else {
+            const now = new Date().toISOString();
             const newTask: TaskModel = {
-                id: tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1,
                 ...data,
+                taskId: crypto.randomUUID(), // or leave blank for backend to generate
+                createdAt: now,
             };
-            setTasks((prev) => [...prev, newTask]);
+            dispatch(addTask(newTask));
         }
         setIsModalOpen(false);
     };
+
 
     return (
         <div className="container py-4">
@@ -119,9 +106,13 @@ export function TaskPage() {
                 </div>
             </div>
 
-            {filteredTasks.length > 0 ? (
+            {loading ? (
+                <p>Loading tasks...</p>
+            ) : error ? (
+                <p>Error: {error}</p>
+            ) : filteredTasks.length > 0 ? (
                 filteredTasks.map((task) => (
-                    <TaskCard key={task.id} task={task} onEdit={handleEditClick} />
+                    <TaskCard key={task.taskId} task={task} onEdit={handleEditClick} />
                 ))
             ) : (
                 <p>No tasks found.</p>
@@ -131,7 +122,8 @@ export function TaskPage() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onSubmit={handleModalSubmit}
-                initialData={editTask ? { ...editTask, id: undefined } as Omit<TaskModel, "id"> : undefined}
+                // @ts-ignore
+                initialData={editTask ? { ...editTask, taskId: undefined, createdAt: undefined } as Omit<TaskModel, "taskId" | "createdAt"> : undefined}
                 isEditMode={!!editTask}
             />
         </div>

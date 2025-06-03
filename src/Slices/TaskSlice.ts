@@ -19,22 +19,34 @@ export const addTask = createAsyncThunk(
     async (task: TaskModel, { dispatch, rejectWithValue }) => {
         try {
             const response = await api.post("task/addTask", task, { withCredentials: true });
-            dispatch(getAllTasksFromSignedInUser());
+            const mail = localStorage.getItem('user-email')
+            if (mail){
+                dispatch(getAllTasksFromSignedInUser(mail));
+            }
             return response.data;
-        } catch (e: any) {
-            return rejectWithValue(e.response?.data || "Failed to add task");
+        } catch (e: unknown) {
+            if (typeof e === "object" && e !== null && "response" in e) {
+                const err = e as { response?: { data: string } };
+                return rejectWithValue(err.response?.data || "Failed to add task");
+            }
+            return rejectWithValue("Failed to add task");
         }
     }
 );
 
 export const getAllTasksFromSignedInUser = createAsyncThunk(
     "task/getAllOfSignedInUser",
-    async (_, { rejectWithValue }) => {
+    async (email:string, { rejectWithValue }) => {
         try {
-            const response = await api.get("task/getAllOfSignedInUser", { withCredentials: true });
+            const response = await api.post("task/getAllOfSignedInUser",{email});
+            console.log(response)
             return response.data;
-        } catch (e: any) {
-            return rejectWithValue(e.response?.data || "Failed to fetch tasks");
+        }  catch (e: unknown) {
+            if (typeof e === "object" && e !== null && "response" in e) {
+                const err = e as { response?: { data: string } };
+                return rejectWithValue(err.response?.data || "Failed to add task");
+            }
+            return rejectWithValue("Failed to add task");
         }
     }
 );
@@ -44,10 +56,17 @@ export const deleteTask = createAsyncThunk(
     async (taskId: string, { dispatch, rejectWithValue }) => {
         try {
             const response = await api.delete(`task/deleteTask/${taskId}`, { withCredentials: true });
-            dispatch(getAllTasksFromSignedInUser());
+            const mail = localStorage.getItem('user-email')
+            if (mail){
+                dispatch(getAllTasksFromSignedInUser(mail));
+            }
             return response.data;
-        } catch (e: any) {
-            return rejectWithValue(e.response?.data || "Failed to delete task");
+        }  catch (e: unknown) {
+            if (typeof e === "object" && e !== null && "response" in e) {
+                const err = e as { response?: { data: string } };
+                return rejectWithValue(err.response?.data || "Failed to add task");
+            }
+            return rejectWithValue("Failed to add task");
         }
     }
 );
@@ -57,10 +76,17 @@ export const updateTask = createAsyncThunk(
     async ({ taskId, task }: { taskId: string; task: TaskModel }, { dispatch, rejectWithValue }) => {
         try {
             const response = await api.put(`task/updateTask/${taskId}`, task, { withCredentials: true });
-            dispatch(getAllTasksFromSignedInUser());
+            const mail = localStorage.getItem('user-email')
+            if (mail){
+                dispatch(getAllTasksFromSignedInUser(mail));
+            }
             return response.data;
-        } catch (e: any) {
-            return rejectWithValue(e.response?.data || "Failed to update task");
+        }  catch (e: unknown) {
+            if (typeof e === "object" && e !== null && "response" in e) {
+                const err = e as { response?: { data: string } };
+                return rejectWithValue(err.response?.data || "Failed to add task");
+            }
+            return rejectWithValue("Failed to add task");
         }
     }
 );

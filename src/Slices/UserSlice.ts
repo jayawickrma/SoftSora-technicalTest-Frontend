@@ -34,6 +34,7 @@ export type UserRootState = {
 export const login = createAsyncThunk(
     "auth/signIn",
     async (user: UserModel) => {
+        // eslint-disable-next-line no-useless-catch
             try {
                     const response = await api.post("auth/signIn", user, { withCredentials: true });
                     return response.data;
@@ -46,6 +47,7 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk(
     "auth/signUp",
     async (user: UserModel) => {
+        // eslint-disable-next-line no-useless-catch
             try {
                     const response = await api.post("auth/signUp", user, { withCredentials: true });
                     return response.data;

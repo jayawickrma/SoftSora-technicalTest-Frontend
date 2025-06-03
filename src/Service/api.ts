@@ -32,7 +32,7 @@ api.interceptors.response.use((response) => response,
             if (refreshToken) {
                 try {
                     const response: any = await api.post(
-                        "auth/refresh-token",
+                        "auth/refreshToken",
                         {},
                         {
                             headers: {

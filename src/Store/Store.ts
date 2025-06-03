@@ -1,9 +1,11 @@
 import {configureStore} from "@reduxjs/toolkit";
 import UserSlice from "../Slices/UserSlice.ts";
+import TaskSlice from "../Slices/TaskSlice.ts";
 
 export const store =configureStore({
     reducer:{
-        user :UserSlice
+        user :UserSlice,
+        task:TaskSlice
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

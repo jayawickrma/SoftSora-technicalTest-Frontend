@@ -17,20 +17,19 @@ export function TaskModal({
                               initialData,
                               isEditMode = false,
                           }: TaskModalProps) {
-    const [formData, setFormData] = useState<Omit<TaskModel, "id">>({
+    const [formData, setFormData] = useState<Omit<TaskModel, "taskId">>({
         title: "",
         description: "",
         priority: "low",
         status: "pending",
         dueDate: "",
-        createdAt: new Date().toISOString().split("T")[0], // Default to today
+        createdAt: new Date().toISOString().split("T")[0],
     });
 
     useEffect(() => {
         if (initialData) {
             setFormData(initialData);
         } else {
-            // Reset form when adding new task
             setFormData({
                 title: "",
                 description: "",
@@ -48,6 +47,7 @@ export function TaskModal({
     };
 
     const handleSubmit = () => {
+        // @ts-ignore
         onSubmit(formData);
         onClose();
     };

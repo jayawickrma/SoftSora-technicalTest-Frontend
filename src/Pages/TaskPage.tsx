@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import type { RootState, AppDispatch } from "../Store/Store.ts";
 import { TaskCard } from "../Components/TaskCardComponent";
 import { TaskModal } from "../Components/TaskModalCOmponent.tsx";
@@ -9,12 +10,14 @@ import {
     deleteTask,
     getAllTasksFromSignedInUser,
 } from "../Slices/TaskSlice";
+import { logout } from "../Slices/UserSlice";
 import type { TaskModel } from "../Model/TaskModel";
 import Swal from "sweetalert2";
 import "../CSS/TaskCard.css";
 
 export function TaskPage() {
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
     const { tasks, loading, error } = useSelector((state: RootState) => state.task);
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -82,6 +85,36 @@ export function TaskPage() {
         }
     };
 
+    const handleLogout = async () => {
+        const result = await Swal.fire({
+            title: "Logout",
+            text: "Are you sure you want to logout?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, logout",
+            cancelButtonText: "Cancel"
+        });
+
+        if (result.isConfirmed) {
+            try {
+                dispatch(logout());
+                localStorage.removeItem('user-email');
+                Swal.fire({
+                    title: "Logged out!",
+                    text: "You have been successfully logged out.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                navigate("/"); // Adjust the route as needed
+            } catch (err) {
+                Swal.fire("Error", "Failed to logout. Please try again.", "error");
+            }
+        }
+    };
+
     const handleModalSubmit = async (data: Omit<TaskModel, "taskId" | "createdAt">) => {
         if (editTask) {
             try {
@@ -107,11 +140,12 @@ export function TaskPage() {
         setIsModalOpen(false);
     };
 
-
     return (
         <div className="container py-4">
             <div className="task-top-bar">
-                <h2 className="mb-4">Manage Your Tasks</h2>
+                <div className="header-with-logout">
+                    <h2 className="mb-4">Manage Your Tasks</h2>
+                </div>
                 <input
                     type="text"
                     placeholder="Search by title..."
@@ -157,6 +191,11 @@ export function TaskPage() {
                 initialData={editTask ? { ...editTask, taskId: undefined, createdAt: undefined } as Omit<TaskModel, "taskId" | "createdAt"> : undefined}
                 isEditMode={!!editTask}
             />
+
+            {/* Fixed Circular Logout Button */}
+            <button className="logout-btn" onClick={handleLogout} title="Logout">
+                <span className="logout-icon">LOG OUT</span>
+            </button>
         </div>
     );
 }

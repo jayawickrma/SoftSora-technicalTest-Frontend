@@ -86,7 +86,7 @@ export const updateTask = createAsyncThunk(
                 dispatch(getAllTasksFromSignedInUser(mail));
             }
 
-            return response.data.updatedTask; // ✅ this matches backend response
+            return response.data.updatedTask;
         } catch (e: unknown) {
             if (typeof e === "object" && e !== null && "response" in e) {
                 const err = e as { response?: { data: string } };

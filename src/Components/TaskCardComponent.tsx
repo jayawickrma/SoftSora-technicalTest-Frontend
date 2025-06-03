@@ -39,7 +39,7 @@ export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
                         {task.status}
                     </span>
                     <div className="task-buttons">
-                        <button className="task-btn edit" onClick={handleEdit}>✏️ Edit</button>
+                        <button  className="task-btn edit" onClick={handleEdit}>✏️ Edit</button>
                         <button className="task-btn delete" onClick={handleDelete}>🗑️ Delete</button>
                     </div>
                 </div>

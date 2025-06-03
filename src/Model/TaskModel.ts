@@ -3,11 +3,11 @@ export class TaskModel {
     title: string;
     description: string;
     priority: string;
-    status: "pending" | "in-progress" | "completed";
+    status: "pending" | "in progress" | "completed";
     dueDate:string;
     createdAt: string;
 
-    constructor(taskId: string, title: string, description: string, priority: string, status: "pending" | "in-progress" | "completed", dueDate: string, createdAt: string) {
+    constructor(taskId: string, title: string, description: string, priority: string, status: "pending" | "in progress" | "completed", dueDate: string, createdAt: string) {
         this.taskId = taskId;
         this.title = title;
         this.description = description;

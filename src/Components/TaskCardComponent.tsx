@@ -4,7 +4,7 @@ import "../CSS/TaskCard.css";
 interface TaskCardProps {
     task: TaskModel;
     onEdit: (task: TaskModel) => void;
-    onDelete?: (taskId: number) => void;
+    onDelete?: (taskId: string) => void;
 }
 
 export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
@@ -14,7 +14,7 @@ export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
 
     const handleDelete = () => {
         if(onDelete) {
-            onDelete(task.id);
+            onDelete(task.taskId);
         }
     };
 

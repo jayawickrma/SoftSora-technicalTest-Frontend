@@ -38,25 +38,31 @@
     font-size: 25px;
     font-weight: 750;
     color: #333;
-    margin-left: -600px;
+    margin-left: -730px;
     margin-top: -7px;
 }
 
 .task-description {
     font-size: 15px;
     color: #555;
-    margin-bottom: 12px;
     line-height: 1.5;
-    margin-left: -600px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;        /* limits to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 12px;
     margin-top: -10px;
+    margin-left: -730px; /* ⚠️ Consider using Flex/Grid instead of negative margins */
 }
+
 
 .task-info {
     font-size: 13px;
     color: #444;
     margin-bottom: 8px;
     margin-top: -87px;
-    margin-left: 280px;
+    margin-left: 180px;
 }
 
 .task-info p {

@@ -6,15 +6,16 @@ import { TaskModal } from "../Components/TaskModalCOmponent.tsx";
 import {
     addTask,
     updateTask,
+    deleteTask,
     getAllTasksFromSignedInUser,
 } from "../Slices/TaskSlice";
 import type { TaskModel } from "../Model/TaskModel";
+import Swal from "sweetalert2";
 import "../CSS/TaskCard.css";
 
 export function TaskPage() {
     const dispatch = useDispatch<AppDispatch>();
     const { tasks, loading, error } = useSelector((state: RootState) => state.task);
-
 
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
@@ -22,12 +23,11 @@ export function TaskPage() {
     const [editTask, setEditTask] = useState<TaskModel | null>(null);
 
     useEffect(() => {
-        const mail = localStorage.getItem('user-email')
-        console.log(mail)
-        if (mail){
-        dispatch(getAllTasksFromSignedInUser(mail));
+        const mail = localStorage.getItem('user-email');
+        if (mail) {
+            dispatch(getAllTasksFromSignedInUser(mail));
         }
-    }, []);
+    }, [dispatch]);
 
     const filteredTasks = tasks
         .filter((task) =>
@@ -42,7 +42,6 @@ export function TaskPage() {
                 medium: 2,
                 low: 3,
             };
-
             const priorityDiff =
                 (priorityOrder[a.priority.toLowerCase()] ?? 4) -
                 (priorityOrder[b.priority.toLowerCase()] ?? 4);
@@ -62,17 +61,48 @@ export function TaskPage() {
         setIsModalOpen(true);
     };
 
-    const handleModalSubmit = (data: Omit<TaskModel, "taskId" | "createdAt">) => {
+    const handleDelete = async (taskId: string) => {
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "This task will be deleted permanently!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await dispatch(deleteTask(taskId)).unwrap();
+                Swal.fire("Deleted!", "Task has been deleted.", "success");
+            } catch (err) {
+                Swal.fire("Error", typeof err === "string" ? err : "Failed to delete task", "error");
+            }
+        }
+    };
+
+    const handleModalSubmit = async (data: Omit<TaskModel, "taskId" | "createdAt">) => {
         if (editTask) {
-            dispatch(updateTask({ taskId: editTask.taskId, task: { ...editTask, ...data } }));
+            try {
+                await dispatch(updateTask({ taskId: editTask.taskId, task: { ...editTask, ...data } })).unwrap();
+                Swal.fire("Updated!", "Task updated successfully", "success");
+            } catch (err) {
+                Swal.fire("Error", typeof err === "string" ? err : "Failed to update task", "error");
+            }
         } else {
             const now = new Date().toISOString();
             const newTask: TaskModel = {
                 ...data,
-                taskId: crypto.randomUUID(), // or leave blank for backend to generate
+                taskId: crypto.randomUUID(),
                 createdAt: now,
             };
-            dispatch(addTask(newTask));
+            try {
+                await dispatch(addTask(newTask)).unwrap();
+                Swal.fire("Added!", "Task added successfully", "success");
+            } catch (err) {
+                Swal.fire("Error", typeof err === "string" ? err : "Failed to add task", "error");
+            }
         }
         setIsModalOpen(false);
     };
@@ -112,7 +142,8 @@ export function TaskPage() {
                 <p>Error: {error}</p>
             ) : filteredTasks.length > 0 ? (
                 filteredTasks.map((task) => (
-                    <TaskCard key={task.taskId} task={task} onEdit={handleEditClick} />
+                    // @ts-ignore
+                    <TaskCard key={task.taskId} task={task} onEdit={handleEditClick} onDelete={handleDelete} />
                 ))
             ) : (
                 <p>No tasks found.</p>

@@ -200,10 +200,13 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        margin-left: -5px;
     }
 
     .container {
         overflow-y: auto;
+        overflow-x: auto;
+        margin-left: -40px;
     }
 
     .task-card-header {
@@ -398,10 +401,14 @@
     .task-header {
         flex-direction: column;
         align-items: stretch;
+        font-weight: 300;
     }
 
     .task-filters {
+        width: 80vw;
         justify-content: center;
+        margin-left: 10px;
+        margin-top: -50px;
     }
 
     .status-btn {
@@ -410,7 +417,8 @@
     }
 
     .add-task-btn {
-        width: 100%;
+        width: 80%;
+        margin-left: 15px;
         text-align: center;
     }
 }
